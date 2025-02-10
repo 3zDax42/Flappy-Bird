@@ -33,6 +33,7 @@ class Pipe:
         bottom_height = 800 - (self.height + self.gap)
         screen.blit(self.top_pipe, (self.x, top_height - self.top_pipe.get_height()))
         screen.blit(self.bottom_pipe, (self.x, self.height + self.gap))
+
 #=============================================================#
 bird = bird()
 pipes = []
@@ -43,17 +44,18 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 36)
 font2 = pygame.font.Font(None, 72)
 pipe_image = pygame.image.load('Pipe.png').convert_alpha()
-background = pygame.image.load('background_image.png')
+bird_image = pygame.image.load('Bird.png').convert_alpha()
+background = pygame.image.load('background.png')
 score = 0
-framewidth = 64
-frameheight = 64
+framewidth = 30
+frameheight = 30
 row_num = 0
-frame_num = 0
+frame_num = 16
 bg_x1 = 0
-bg_x2 = 64
+bg_x2 = 320
+bg_x3 = 640
 ticker=0
 
-# 0 columns 50 rows
 running = True
 while running:
     clock.tick(60)
@@ -71,8 +73,7 @@ while running:
     if spawn_pipe >= 150:
         pipes.append(Pipe(800))
         spawn_pipe = 0
-    if ticker%10 == 0:
-        frame_num+=1
+    frame_num+=1
     if frame_num > 49:
         frame_num = 0
     #---------------Gamephisics---------------#
@@ -87,22 +88,34 @@ while running:
         i -= 1
     bird.physics()
     #--------------Render section---------------#
+    screen.fill((0, 0, 0))
     bg_x1 -= 2
     bg_x2 -= 2
-    if bg_x1 <= -64:
-        bg_x1 = 64
-    if bg_x2 <= -64:
-        bg_x2 = 64
-    screen.blit(background, (0,0), (framewidth*frame_num, row_num*frameheight, framewidth, frameheight))
+    bg_x3 -= 2
+    if bg_x1 <= -320:
+        bg_x1 = 640
+    if bg_x3 <= -320:
+        bg_x3 = 640
+    if bg_x2 <= -320:
+        bg_x2 = 640
+    screen.blit(background, (bg_x1, -180))
+    screen.blit(background, (bg_x2, -180))
+    screen.blit(background, (bg_x3, -180))
+    screen.blit(background, (bg_x1, 140))
+    screen.blit(background, (bg_x2, 140))
+    screen.blit(background, (bg_x3, 140))
+    screen.blit(background, (bg_x1, 460))
+    screen.blit(background, (bg_x2, 460))
+    screen.blit(background, (bg_x3, 460))
     ##############################################
-    score_text = font.render("Score:", True, (255, 255, 255))
-    screen.blit(score_text, (650, 20))
-    score_text2 = font.render(str(score), True, (255, 255, 255))
-    screen.blit(score_text2, (750, 20))
     for pipe in pipes:
         pipe.draw()
     bird.draw()
-    
+    screen.blit(bird_image, (50, bird.y), (framewidth*frame_num, row_num*frameheight, framewidth, frameheight))
+    score_text = font.render("Score:", True, (255, 255, 255))
+    screen.blit(score_text, (600, 20))
+    score_text2 = font.render(str(score), True, (255, 255, 255))
+    screen.blit(score_text2, (750, 20))
     pygame.display.flip()
     #--------------End game loop--------------#
 text = font2.render("Game Over", True, (255, 50, 50))
