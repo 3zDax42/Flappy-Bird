@@ -50,7 +50,7 @@ score = 0
 framewidth = 30
 frameheight = 30
 row_num = 0
-frame_num = 16
+frame_num = 0
 bg_x1 = 0
 bg_x2 = 320
 bg_x3 = 640
@@ -73,9 +73,10 @@ while running:
     if spawn_pipe >= 150:
         pipes.append(Pipe(800))
         spawn_pipe = 0
-    frame_num+=1
-    if frame_num > 49:
-        frame_num = 0
+    if ticker%10==0:
+        row_num+=1
+    if row_num > 15:
+        row_num = 0
     #---------------Gamephisics---------------#
     for pipe in pipes:
         pipe.move()
@@ -110,7 +111,7 @@ while running:
     ##############################################
     for pipe in pipes:
         pipe.draw()
-    bird.draw()
+    #bird.draw()
     screen.blit(bird_image, (50, bird.y), (framewidth*frame_num, row_num*frameheight, framewidth, frameheight))
     score_text = font.render("Score:", True, (255, 255, 255))
     screen.blit(score_text, (600, 20))
